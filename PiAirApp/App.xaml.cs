@@ -49,21 +49,43 @@ namespace YMModsApp
 
         protected override void OnInitialized()
         {
-            Init();
-            base.OnInitialized();
+            string username = MySqLite.GetConfig("username");
+            string password = MySqLite.GetConfig("password");
+            int isLogin = int.Parse(MySqLite.GetConfig("isLogin"));
+
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && isLogin == 1)
+            {
+                Init();
+                base.OnInitialized();
+                return;
+            }
+
+            var dialog = Container.Resolve<IDialogService>();
+
+            dialog.ShowDialog("LoginView", callback =>
+            {
+                if (callback.Result != ButtonResult.OK)
+                {
+                    Environment.Exit(0);
+                    return;
+                }
+
+                Init();
+                base.OnInitialized();
+            });
         }
 
         public void Init()
         {
-            //var service = App.Current.MainWindow.DataContext as IConfigureService;
-            //if (service != null)
-            //{
-            //    service.Configure();
-            //    // 监听扫码枪
-            //    ScanerHook sh = new ScanerHook();
-            //    sh.Start();
-            //    sh.ScanerEvent += service.ScanerRe;
-            //}
+            var service = App.Current.MainWindow.DataContext as IConfigureService;
+            if (service != null)
+            {
+                service.Configure();
+                // 监听扫码枪
+                //ScanerHook sh = new ScanerHook();
+                //sh.Start();
+                //sh.ScanerEvent += service.ScanerRe;
+            }
         }
 
         private static System.Threading.Mutex mutex;

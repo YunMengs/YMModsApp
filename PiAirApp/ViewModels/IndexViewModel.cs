@@ -75,7 +75,6 @@ namespace YMModsApp.ViewModels
             //Title = $"你好，{MySqLite.GetConfig("nickname")} {DateTime.Now.GetDateTimeFormats('D')[1]}";
             Title = $"{DateTime.Now.GetDateTimeFormats('D')[1]}";
             Version = "V " + Public.GetVersion();
-            CreateTaskBars();
             this.regionManager = provider.Resolve<IRegionManager>();
             this.dialog = dialog;
             NavigateCommand = new DelegateCommand<TaskBar>(Navigate);
@@ -87,30 +86,10 @@ namespace YMModsApp.ViewModels
                 service.RegisterIndexViewModel(this);
             }
             // 循环任务
-            new Task(() =>
-            {
-                while (true)
-                {
-                    NetWorkPingTest();
-                    Thread.Sleep(2000);
-                }
-            }).Start();
 
             new Task(() =>
             {
-                int i = int.Parse(MySqLite.GetConfig("tips"));
-                Application.Current.Dispatcher.Invoke((Action)(async () =>
-                {
-                    //回归主线程进行操作
-                    if (i < 2)
-                    {
-                        i++;
-                        MySqLite.SaveConfig("tips", i.ToString());
-                        await dialog.Question("温馨提示", "1. 点击右上角头像可以注销操作\n" +
-                    "2. 点击左下角版本号可以进行更新检测");
-                    }
-                    CheckUpgradeFunc();
-                }));
+                CheckUpgradeFunc();
             })
             {
             }.Start();
@@ -129,54 +108,6 @@ namespace YMModsApp.ViewModels
                     mainViewModel.CheckUpgrade();
                 }));
             }).Start();
-        }
-
-        /// <summary>
-        /// 网络检测任务
-        /// </summary>
-        public void NetWorkPingTest()
-        {
-            try
-            {
-                PingReply reply = NetWorkTool.PingTest();
-                if (reply != null)
-                {
-                    if (reply.Status == IPStatus.Success)
-                    {
-                        if (TaskBars[3].Color != "#FF1ECA3A")
-                        {
-                            Application.Current.Dispatcher.Invoke((Action)(() =>
-                            {
-                                //回归主线程进行操作
-                                TaskBars[3] = new TaskBar() { Icon = "WifiArrowLeftRight", Title = "网络", Content = reply.RoundtripTime.ToString() + "ms", Color = "#FF1ECA3A", Target = "" };
-                            }));
-                        }
-                        else
-                        {
-                            TaskBars[3].Content = reply.RoundtripTime.ToString() + "ms";
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception();
-                    }
-                }
-                else
-                {
-                    throw new Exception();
-                }
-            }
-            catch (Exception)
-            {
-                if (TaskBars[3].Color != "red")
-                {
-                    Application.Current.Dispatcher.Invoke((Action)(() =>
-                    {
-                        //回归主线程进行操作
-                        TaskBars[3] = new TaskBar() { Icon = "WifiCancel", Title = "网络", Content = "---", Color = "red", Target = "" };
-                    }));
-                }
-            }
         }
 
         public void RegisterMainViewModel(MainViewModel mainViewModel)

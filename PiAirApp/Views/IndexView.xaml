@@ -32,82 +32,12 @@
             FontSize="22"
             Text="{Binding Title}" />
         <Border BorderBrush="#DDDDDD" BorderThickness="0,0,0,0.3" />
-
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding TaskBars}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="4" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border
-                        Margin="10"
-                        Background="{Binding Color}"
-                        CornerRadius="5">
-                        <Border.InputBindings>
-                            <MouseBinding
-                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                CommandParameter="{Binding}"
-                                MouseAction="LeftClick" />
-                        </Border.InputBindings>
-
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Effect">
-                                            <Setter.Value>
-                                                <DropShadowEffect
-                                                    BlurRadius="10"
-                                                    ShadowDepth="1"
-                                                    Color="#DDDDDD" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <Grid>
-                            <StackPanel Margin="20,10">
-                                <materialDesign:PackIcon
-                                    Width="30"
-                                    Height="30"
-                                    Kind="{Binding Icon}" />
-                                <TextBlock
-                                    Margin="0,15"
-                                    FontSize="15"
-                                    Text="{Binding Title}" />
-                                <TextBlock
-                                    FontSize="40"
-                                    FontWeight="Bold"
-                                    Text="{Binding Content}" />
-                            </StackPanel>
-
-                            <Canvas ClipToBounds="True">
-                                <Border
-                                    Canvas.Top="10"
-                                    Canvas.Right="-50"
-                                    Width="120"
-                                    Height="120"
-                                    Background="#FFFFFF"
-                                    CornerRadius="100"
-                                    Opacity="0.1" />
-                                <Border
-                                    Canvas.Top="80"
-                                    Canvas.Right="-30"
-                                    Width="120"
-                                    Height="120"
-                                    Background="#FFFFFF"
-                                    CornerRadius="100"
-                                    Opacity="0.1" />
-                            </Canvas>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Grid Grid.Row="2" Margin="15,10,15,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+        </Grid>
 
         <Grid Grid.Row="2" Margin="15,10,15,10">
             <Grid.ColumnDefinitions>
