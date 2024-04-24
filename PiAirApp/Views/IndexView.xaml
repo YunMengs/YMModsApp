@@ -1,0 +1,207 @@
+﻿<UserControl
+    x:Class="YMModsApp.Views.IndexView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+    xmlns:cv="clr-namespace:YMModsApp.Common.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:YMModsApp.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:prism="http://prismlibrary.com/"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <cv:IntToBoolConveter x:Key="intToBool" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.ColumnSpan="2"
+            Margin="15,10,15,10"
+            FontSize="22"
+            Text="{Binding Title}" />
+        <Border BorderBrush="#DDDDDD" BorderThickness="0,0,0,0.3" />
+
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding TaskBars}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="4" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Margin="10"
+                        Background="{Binding Color}"
+                        CornerRadius="5">
+                        <Border.InputBindings>
+                            <MouseBinding
+                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}"
+                                MouseAction="LeftClick" />
+                        </Border.InputBindings>
+
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect
+                                                    BlurRadius="10"
+                                                    ShadowDepth="1"
+                                                    Color="#DDDDDD" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid>
+                            <StackPanel Margin="20,10">
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Kind="{Binding Icon}" />
+                                <TextBlock
+                                    Margin="0,15"
+                                    FontSize="15"
+                                    Text="{Binding Title}" />
+                                <TextBlock
+                                    FontSize="40"
+                                    FontWeight="Bold"
+                                    Text="{Binding Content}" />
+                            </StackPanel>
+
+                            <Canvas ClipToBounds="True">
+                                <Border
+                                    Canvas.Top="10"
+                                    Canvas.Right="-50"
+                                    Width="120"
+                                    Height="120"
+                                    Background="#FFFFFF"
+                                    CornerRadius="100"
+                                    Opacity="0.1" />
+                                <Border
+                                    Canvas.Top="80"
+                                    Canvas.Right="-30"
+                                    Width="120"
+                                    Height="120"
+                                    Background="#FFFFFF"
+                                    CornerRadius="100"
+                                    Opacity="0.1" />
+                            </Canvas>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Grid Grid.Row="2" Margin="15,10,15,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="#DDDDDD" BorderThickness="0,0,0,0.3" />
+            <TextBlock FontSize="26" Text="{Binding ScanTips}" />
+            <Label
+                Grid.Column="1"
+                HorizontalContentAlignment="Right"
+                Content="{Binding CourierNumber}"
+                FontSize="26"
+                Foreground="red" />
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Vertical">
+                <Image Width="200" Source="/Images/xws0001.png" />
+                <Button
+                    Width="200"
+                    Content="清空绑定"
+                    IsDefault="True"
+                    Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <Button.InputBindings>
+                        <!--  键盘事件绑定  -->
+                        <!--<KeyBinding Key="Enter" Command="{Binding Search_Click}" />-->
+                        <!--  鼠标事件绑定  -->
+                        <MouseBinding
+                            Command="{Binding DoCommand}"
+                            CommandParameter="xws0001"
+                            MouseAction="LeftClick" />
+                    </Button.InputBindings>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+                <Image Width="200" Source="/Images/xws0003.png" />
+                <Button
+                    Width="200"
+                    Content="开锁检查"
+                    IsDefault="True"
+                    Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <Button.InputBindings>
+                        <!--  键盘事件绑定  -->
+                        <!--<KeyBinding Key="Enter" Command="{Binding Search_Click}" />-->
+                        <!--  鼠标事件绑定  -->
+                        <MouseBinding
+                            Command="{Binding DoCommand}"
+                            CommandParameter="xws0003"
+                            MouseAction="LeftClick" />
+                    </Button.InputBindings>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Vertical">
+                <Image Width="200" Source="/Images/xws0002.png" />
+                <Button
+                    Width="200"
+                    Content="解绑设备"
+                    IsDefault="True"
+                    Style="{StaticResource MaterialDesignOutlinedButton}">
+                    <Button.InputBindings>
+                        <!--  键盘事件绑定  -->
+                        <!--<KeyBinding Key="Enter" Command="{Binding Search_Click}" />-->
+                        <!--  鼠标事件绑定  -->
+                        <MouseBinding
+                            Command="{Binding DoCommand}"
+                            CommandParameter="xws0002"
+                            MouseAction="LeftClick" />
+                    </Button.InputBindings>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <TextBlock
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    ToolTip="点击我进行检测更新">
+                    <Hyperlink Command="{Binding CheckUpgradeCommand}" NavigateUri="http://www.cnsmarto.com">
+                        <Run Text="{Binding Path=Version}" />
+                    </Hyperlink>
+                </TextBlock>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
